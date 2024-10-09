@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: {{- if or (eq .Values.arg "worker")}} StatefulSet {{- else }} Deployment {{- end }}
+metadata:
+  name: {{ template "api-getway.fullname" . }}
+  labels:
+    app: {{ template "api-getway.name" . }}
+    chart: {{ template "api-getway.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  {{- if or (eq .Values.arg "worker")}}
+  serviceName: {{ template "api-getway.name" . }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ template "api-getway.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "api-getway.name" . }}
+        release: {{ .Release.Name }}
+      annotations:
+        releaseTime: {{ dateInZone "2006-01-02 15:04:05Z" (now) "UTC"| quote }}
+    spec:
+      volumes:
+        - name: wooplus
+          secret:
+            secretName: wooplus
+        - name: applesignin
+          secret:
+            secretName: applesignin
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [{{ .Values.arg }}]
+          env:
+          {{- range $key, $value := .Values.env }}
+          - name: {{ $key }}
+            value: {{ $value | quote}}
+          {{- end }}
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          volumeMounts:
+            - name: wooplus
+              mountPath: "/etc/wooplus"
+              readOnly: true
+            - name: applesignin
+              mountPath: "/etc/applesignin"
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
