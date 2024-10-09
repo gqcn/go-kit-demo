@@ -5,7 +5,7 @@ pb:
 	protoc --proto_path=user/manifest/proto \
 	--go_out=paths=source_relative:user/api \
 	--go-grpc_out=paths=source_relative:user/api \
-	user/manifest/proto/api.proto
+	user/manifest/proto/user.proto
 
 # compile services to images.
 .PHONY: image

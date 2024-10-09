@@ -11,10 +11,10 @@ import (
 func main() {
 	var (
 		svc           = service.NewAddService()
-		sumHandler    = transport.NewSumHandler(svc)
-		concatHandler = transport.NewConcatHandler(svc)
+		createHandler = transport.NewCreateHandler(svc)
+		searchHandler = transport.NewSearchHandler(svc)
 	)
-	http.Handle("/sum", sumHandler)
-	http.Handle("/concat", concatHandler)
+	http.Handle("/create", createHandler)
+	http.Handle("/search", searchHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

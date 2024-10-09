@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package api;
+
+option go_package="user/api";
+
+// 用户服务
+service User {
+  rpc Create (CreateRequest) returns (EmptyResponse) {}
+  rpc Search (SearchRequest) returns (SearchResponse) {}
+}
+
+// 空返回结构
+message EmptyResponse {}
+
+// 地理位置结构
+message GeoPoint {
+  string          type        = 1; // 类型
+  repeated double coordinates = 2; // 坐标点
+}
+
+message UserData {
+  string   name          = 1; // 姓名
+  int32    age           = 2; // 年龄
+  int32    gender        = 3; // 性别
+  GeoPoint location      = 4; // GPS位置
+  int32    match_gender  = 5; // 性取向
+  int32    match_min_age = 6; // 年龄偏好范围(min)
+  int32    match_max_age = 7; // 年龄偏好范围(max)
+}
+
+message CreateRequest {
+  UserData user = 1; // 用户数据结构
+}
+
+message SearchRequest {
+  int32 min_age       = 1; // 年龄范围(min)
+  int32 max_age       = 2; // 年龄范围(max)
+  int32 gender        = 3; // 性别
+  int32 match_gender  = 4; // 性取向
+  int32 match_min_age = 5; // 年龄偏好(min)
+  int32 match_max_age = 6; // 年龄偏好(max)
+}
+
+message SearchResponse {
+  repeated UserData users = 1; // 查询匹配到的用户列表
+}

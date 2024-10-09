@@ -13,7 +13,7 @@ import (
 
 func main() {
 	var (
-		svc = service.NewAddService()
+		svc = service.NewUserService()
 		gs  = transport.NewAddServer(svc)
 	)
 	listener, err := net.Listen("tcp", ":8000")
@@ -23,7 +23,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	api.RegisterAddServer(s, gs)
+	api.RegisterUserServer(s, gs)
 	if err = s.Serve(listener); err != nil {
 		fmt.Printf("failed to serve: %v", err)
 		return
