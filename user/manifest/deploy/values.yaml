@@ -5,8 +5,6 @@
 replicaCount: 1
 
 image:
-  repository: 937399771982.dkr.ecr.us-west-1.amazonaws.com/api-getway
-  tag: v9.0.0.3-dev
   pullPolicy: Always
 
 arg: "server"
