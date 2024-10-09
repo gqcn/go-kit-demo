@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package pb;
+package api;
 
 option go_package="user/api";
 

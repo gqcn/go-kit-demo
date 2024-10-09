@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Add_Sum_FullMethodName    = "/pb.Add/Sum"
-	Add_Concat_FullMethodName = "/pb.Add/Concat"
+	Add_Sum_FullMethodName    = "/api.Add/Sum"
+	Add_Concat_FullMethodName = "/api.Add/Concat"
 )
 
 // AddClient is the client API for Add service.
@@ -146,7 +146,7 @@ func _Add_Concat_Handler(srv interface{}, ctx context.Context, dec func(interfac
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Add_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pb.Add",
+	ServiceName: "api.Add",
 	HandlerType: (*AddServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
