@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"go-kit-demo/gateway/internal/service"
+	"go-kit-demo/gateway/internal/endpoint"
 	"go-kit-demo/gateway/internal/transport"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -22,17 +22,17 @@ func main() {
 	)
 	logger.Debugf(ctx, `user service addr: %s`, userSvcAddr)
 
-	clientConn, err := grpc.NewClient(
+	userClientConn, err := grpc.NewClient(
 		userSvcAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
 		logger.Fatalf(ctx, "did not connect: %v", err)
 	}
-	defer clientConn.Close()
+	defer userClientConn.Close()
 
 	var (
-		svc           = service.NewUserService(clientConn)
+		svc           = endpoint.NewUserEndpoint(userClientConn)
 		createHandler = transport.NewCreateHandler(svc)
 		searchHandler = transport.NewSearchHandler(svc)
 	)

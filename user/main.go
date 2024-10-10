@@ -5,7 +5,7 @@ import (
 	"net"
 
 	"go-kit-demo/user/api"
-	"go-kit-demo/user/internal/service"
+	"go-kit-demo/user/internal/endpoint"
 	"go-kit-demo/user/internal/transport"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -39,8 +39,8 @@ func main() {
 
 	// 初始化业务模块
 	var (
-		userService = service.NewUserService(client)
-		userServer  = transport.NewAddServer(userService)
+		userService = endpoint.NewUserEndpoint(client)
+		userServer  = transport.NewUserServer(userService)
 	)
 	logger.Infof(ctx, `grpc starts listening on: "%s"`, serverAddr)
 	listener, err := net.Listen("tcp", serverAddr)

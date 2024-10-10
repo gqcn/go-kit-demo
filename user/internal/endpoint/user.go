@@ -1,4 +1,4 @@
-package service
+package endpoint
 
 import (
 	"context"
@@ -7,47 +7,47 @@ import (
 	"go-kit-demo/user/internal/model"
 	"go-kit-demo/user/internal/repository"
 
+	"github.com/gogf/gf/v2/encoding/gjson"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type UserService interface {
+type UserEndpoint interface {
 	Create(ctx context.Context, req *api.CreateRequest) (res *api.EmptyResponse, err error)
 	Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error)
 }
 
-type localUserServiceImpl struct {
+type userEndpointImpl struct {
 	userRepo repository.UserRepository
 }
 
-func NewUserService(client *mongo.Client) UserService {
-	return &localUserServiceImpl{
+func NewUserEndpoint(client *mongo.Client) UserEndpoint {
+	return &userEndpointImpl{
 		userRepo: repository.NewLocalUserRepository(client),
 	}
 }
 
 // Create 新增用户信息。
-func (s *localUserServiceImpl) Create(ctx context.Context, req *api.CreateRequest) (res *api.EmptyResponse, err error) {
-	err = s.userRepo.Create(ctx, &model.User{
-		Name:   req.User.Name,
-		Age:    int(req.User.Age),
-		Gender: int(req.User.Gender),
-		Location: &model.GeoPoint{
-			Type:        req.User.Location.Type,
-			Coordinates: req.User.Location.Coordinates,
-		},
-		MatchGender: int(req.User.MatchGender),
-		MatchMinAge: int(req.User.MatchMinAge),
-		MatchMaxAge: int(req.User.MatchMaxAge),
-	})
+func (s *userEndpointImpl) Create(ctx context.Context, req *api.CreateRequest) (res *api.EmptyResponse, err error) {
+	g.Log().Debugf(ctx, `Create req: %s`, gjson.MustEncodeString(req))
+	var userModel model.User
+	if err = gconv.Scan(req.User, &userModel); err != nil {
+		return
+	}
+	if err = s.userRepo.Create(ctx, &userModel); err != nil {
+		return
+	}
 	res = &api.EmptyResponse{}
 	return
 }
 
 // Search 查询符合条件的用户列表。
 // @TODO 演示场景，未做分页。
-func (s *localUserServiceImpl) Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error) {
+func (s *userEndpointImpl) Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error) {
+	g.Log().Debugf(ctx, `Search req: %s`, gjson.MustEncodeString(req))
 	var (
 		filter = bson.D{}
 		fields = s.userRepo.CollectionInfo(ctx).Fields

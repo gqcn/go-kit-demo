@@ -19,3 +19,46 @@
 `typeof xxx != undefined`的判断会很繁琐，前后端协作效率很低。
 
 ## 关于字段硬编码
+
+
+
+# 接口测试
+
+## 用户创建接口 - Create
+正确的请求。
+```bash
+curl -XPOST -d'{
+  "user":{
+    "name":"test_user",
+    "age":18,
+    "gender":1,
+    "location":{
+      "type":"Point",
+      "coordinates":[104.06055237921923,30.5967693328857]
+    },
+    "match_gender": 2,
+    "match_min_age": 18,
+    "match_max_age": 30
+  }
+}' localhost:8080/create
+```
+
+错误的请求。
+```bash
+curl -XPOST -d'{
+  "user":{
+    "name":"",
+    "age":18,
+    "gender":1,
+    "location":{
+      "type":"Point",
+      "coordinates":[104.06055237921923,30.5967693328857]
+    },
+    "match_gender": 2,
+    "match_min_age": 18,
+    "match_max_age": 30
+  }
+}' localhost:8080/create
+```
+
+## 用户查询接口 - Search

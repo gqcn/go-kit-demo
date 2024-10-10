@@ -6,23 +6,23 @@ import (
 	"net/http"
 
 	"go-kit-demo/gateway/api"
-	"go-kit-demo/gateway/internal/service"
+	userep "go-kit-demo/gateway/internal/endpoint"
 
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
 )
 
-func NewCreateHandler(svc service.UserService) *httptransport.Server {
+func NewCreateHandler(ep userep.UserEndpoint) *httptransport.Server {
 	return httptransport.NewServer(
-		makeCreateEndpoint(svc),
+		makeCreateEndpoint(ep),
 		decodeCreateRequest,
 		encodeResponse,
 	)
 }
 
-func NewSearchHandler(svc service.UserService) *httptransport.Server {
+func NewSearchHandler(ep userep.UserEndpoint) *httptransport.Server {
 	return httptransport.NewServer(
-		makeSearchEndpoint(svc),
+		makeSearchEndpoint(ep),
 		decodeSearchRequest,
 		encodeResponse,
 	)
@@ -48,16 +48,16 @@ func encodeResponse(_ context.Context, w http.ResponseWriter, response interface
 	return json.NewEncoder(w).Encode(response)
 }
 
-func makeCreateEndpoint(svc service.UserService) endpoint.Endpoint {
+func makeCreateEndpoint(ep userep.UserEndpoint) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(*api.CreateRequest)
-		return svc.Create(ctx, req)
+		return ep.Create(ctx, req)
 	}
 }
 
-func makeSearchEndpoint(svc service.UserService) endpoint.Endpoint {
+func makeSearchEndpoint(ep userep.UserEndpoint) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(*api.SearchRequest)
-		return svc.Search(ctx, req)
+		return ep.Search(ctx, req)
 	}
 }
