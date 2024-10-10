@@ -25,7 +25,7 @@
 # 接口测试
 
 ## 用户创建接口 - Create
-正确的请求。
+正确的请求：
 ```bash
 curl -XPOST -d'{
   "user":{
@@ -43,7 +43,7 @@ curl -XPOST -d'{
 }' localhost:8080/create
 ```
 
-错误的请求。
+错误的请求：
 ```bash
 curl -XPOST -d'{
   "user":{
@@ -62,3 +62,12 @@ curl -XPOST -d'{
 ```
 
 ## 用户查询接口 - Search
+
+正确的请求：
+```bash
+curl -XPOST -d'{
+    "gender":1,
+    "min_age": 18,
+    "max_age": 30
+}' localhost:8080/search
+```
