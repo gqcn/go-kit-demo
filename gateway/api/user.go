@@ -22,12 +22,12 @@ type CreateRequest struct {
 type CreateResponse struct{}
 
 type SearchRequest struct {
-	MinAge      int32 `json:"min_age"`       // 年龄范围(min)
-	MaxAge      int32 `json:"max_age"`       // 年龄范围(max)
-	Gender      int32 `json:"gender"`        // 性别
-	MatchGender int32 `json:"match_gender"`  // 性取向
-	MatchMinAge int32 `json:"match_min_age"` // 年龄偏好(min)
-	MatchMaxAge int32 `json:"match_max_age"` // 年龄偏好(max)
+	MinAge      int `json:"min_age"`       // 年龄范围(min)
+	MaxAge      int `json:"max_age"`       // 年龄范围(max)
+	Gender      int `json:"gender"`        // 性别
+	MatchGender int `json:"match_gender"`  // 性取向
+	MatchMinAge int `json:"match_min_age"` // 年龄偏好(min)
+	MatchMaxAge int `json:"match_max_age"` // 年龄偏好(max)
 }
 
 type SearchResponse struct {

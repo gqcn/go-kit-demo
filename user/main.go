@@ -42,7 +42,7 @@ func main() {
 		userService = service.NewUserService(client)
 		userServer  = transport.NewAddServer(userService)
 	)
-	logger.Infof(ctx, `grpc starts listening on "%s"`, serverAddr)
+	logger.Infof(ctx, `grpc starts listening on: "%s"`, serverAddr)
 	listener, err := net.Listen("tcp", serverAddr)
 	if err != nil {
 		logger.Fatalf(ctx, "failed to listen: %v", err)
