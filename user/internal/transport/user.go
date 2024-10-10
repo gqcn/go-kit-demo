@@ -16,7 +16,7 @@ type grpcServer struct {
 	search grpctransport.Handler
 }
 
-func NewAddServer(svc *service.UserService) api.UserServer {
+func NewAddServer(svc service.UserService) api.UserServer {
 	return &grpcServer{
 		create: grpctransport.NewServer(
 			makeCreateEndpoint(svc),
@@ -39,13 +39,13 @@ func directGRPCEncoder(_ context.Context, res interface{}) (interface{}, error) 
 	return res, nil
 }
 
-func makeCreateEndpoint(svc *service.UserService) endpoint.Endpoint {
+func makeCreateEndpoint(svc service.UserService) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return svc.Create(ctx, req.(*api.CreateRequest))
 	}
 }
 
-func makeSearchEndpoint(svc *service.UserService) endpoint.Endpoint {
+func makeSearchEndpoint(svc service.UserService) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return svc.Search(ctx, req.(*api.SearchRequest))
 	}

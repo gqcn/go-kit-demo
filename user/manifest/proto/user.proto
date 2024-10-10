@@ -38,8 +38,8 @@ message SearchRequest {
   int32 max_age       = 2; // 年龄范围(max)
   int32 gender        = 3; // 性别
   int32 match_gender  = 4; // 性取向
-  int32 match_min_age = 5; // 年龄偏好(min)
-  int32 match_max_age = 6; // 年龄偏好(max)
+  int32 match_min_age = 5; // 年龄偏好范围(min)
+  int32 match_max_age = 6; // 年龄偏好范围(max)
 }
 
 message SearchResponse {

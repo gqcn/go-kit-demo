@@ -12,7 +12,7 @@ import (
 	httptransport "github.com/go-kit/kit/transport/http"
 )
 
-func NewCreateHandler(svc *service.UserService) *httptransport.Server {
+func NewCreateHandler(svc service.UserService) *httptransport.Server {
 	return httptransport.NewServer(
 		makeCreateEndpoint(svc),
 		decodeCreateRequest,
@@ -20,7 +20,7 @@ func NewCreateHandler(svc *service.UserService) *httptransport.Server {
 	)
 }
 
-func NewSearchHandler(svc *service.UserService) *httptransport.Server {
+func NewSearchHandler(svc service.UserService) *httptransport.Server {
 	return httptransport.NewServer(
 		makeSearchEndpoint(svc),
 		decodeSearchRequest,
@@ -48,14 +48,14 @@ func encodeResponse(_ context.Context, w http.ResponseWriter, response interface
 	return json.NewEncoder(w).Encode(response)
 }
 
-func makeCreateEndpoint(svc *service.UserService) endpoint.Endpoint {
+func makeCreateEndpoint(svc service.UserService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(*api.CreateRequest)
 		return svc.Create(ctx, req)
 	}
 }
 
-func makeSearchEndpoint(svc *service.UserService) endpoint.Endpoint {
+func makeSearchEndpoint(svc service.UserService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(*api.SearchRequest)
 		return svc.Search(ctx, req)

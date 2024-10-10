@@ -258,8 +258,8 @@ type SearchRequest struct {
 	MaxAge      int32 `protobuf:"varint,2,opt,name=max_age,json=maxAge,proto3" json:"max_age,omitempty"`                  // 年龄范围(max)
 	Gender      int32 `protobuf:"varint,3,opt,name=gender,proto3" json:"gender,omitempty"`                                // 性别
 	MatchGender int32 `protobuf:"varint,4,opt,name=match_gender,json=matchGender,proto3" json:"match_gender,omitempty"`   // 性取向
-	MatchMinAge int32 `protobuf:"varint,5,opt,name=match_min_age,json=matchMinAge,proto3" json:"match_min_age,omitempty"` // 年龄偏好(min)
-	MatchMaxAge int32 `protobuf:"varint,6,opt,name=match_max_age,json=matchMaxAge,proto3" json:"match_max_age,omitempty"` // 年龄偏好(max)
+	MatchMinAge int32 `protobuf:"varint,5,opt,name=match_min_age,json=matchMinAge,proto3" json:"match_min_age,omitempty"` // 年龄偏好范围(min)
+	MatchMaxAge int32 `protobuf:"varint,6,opt,name=match_max_age,json=matchMaxAge,proto3" json:"match_max_age,omitempty"` // 年龄偏好范围(max)
 }
 
 func (x *SearchRequest) Reset() {
