@@ -18,7 +18,7 @@ pb:
 image: build
 	$(eval _TAG  = $(shell git describe --dirty --always --tags --abbrev=8 --match 'v*' | sed 's/-/./2' | sed 's/-/./2'))
 	$(eval _TAG  = $(if ${TAG},  ${TAG}, $(_TAG)))
-	docker build --push --platform linux/amd64 -t loads/go-kit-demo-$(DOCKER_NAME):${_TAG} -f manifest/docker/Dockerfile .
+	docker build --push --platform linux/amd64 -t 937399771982.dkr.ecr.us-west-1.amazonaws.com/go-kit-demo-$(DOCKER_NAME):${_TAG} -f manifest/docker/Dockerfile .
 
 # 编译helm生成部署的yaml文件（开发测试使用）
 .PHONY: yaml

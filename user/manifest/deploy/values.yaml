@@ -4,7 +4,7 @@ replicas: 1
 
 container:
   name:  "main"
-  image: loads/go-kit-demo-user-service:78477c10-dirty
+  image: 937399771982.dkr.ecr.us-west-1.amazonaws.com/go-kit-demo-user-service:78477c10-dirty
   imagePullPolicy: Always
 
 env:

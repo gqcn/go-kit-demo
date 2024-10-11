@@ -1,7 +1,5 @@
 本项目用于演示使用`go-kit`开发`grpc&http`服务，并使用到了`mongodb`做存储，`helm`作为部署管理工具，部署环境为`kubernetes`集群。
 
-> 本项目仅作演示使用，未包含任何业务相关信息。
-
 # 大的方向
 ## 关于项目分层
 使用了`go-kit`官方的结构：
@@ -57,12 +55,7 @@
 - 通过`make yaml`编译生成开发测试的`yaml`文件读取的是`values.yaml`文件。
 - 通过`make yaml.prod`编译生成生产环境的`yaml`文件读取的是`values-prod.yaml`文件，该文件存放在本地未上传到仓库。
 
-## 接口验证
-部署后通过以下指令进入到`gateway`发送请求测试。
-```bash
-kubectl exec -it -n john gateway-64bd444b9b-xrt9s -- bash
-```
-
+## 镜像验证
 gateway服务：
 ```bash
 docker run --platform linux/amd64 \
@@ -80,6 +73,10 @@ loads/go-kit-demo-user-service:7c1e2e8a-dirty
 ```
 
 # 接口测试
+部署后通过以下指令进入到`gateway`发送请求测试。
+```bash
+kubectl exec -it -n john gateway-64bd444b9b-xrt9s -- bash
+```
 
 ## 用户创建接口 - Create
 正确的请求：
