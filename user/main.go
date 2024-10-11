@@ -19,8 +19,8 @@ func main() {
 		ctx        = context.Background()
 		logger     = g.Log()
 		config     = g.Cfg()
-		mongoUri   = config.MustGet(ctx, "mongodb.uri").String()
-		serverAddr = config.MustGet(ctx, "server.address").String()
+		mongoUri   = config.MustGetWithEnv(ctx, "mongodb.uri").String()
+		serverAddr = config.MustGetWithEnv(ctx, "server.address").String()
 		server     = grpc.NewServer()
 	)
 	// 初始化mongodb数据库客户端

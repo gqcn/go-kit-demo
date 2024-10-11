@@ -21,6 +21,23 @@
 ## 关于字段硬编码
 
 
+# 镜像编译、推送、验证
+
+gateway服务：
+```bash
+docker run --platform linux/amd64 \
+-e SERVICE_USER=user-service \
+-e SERVER_ADDRESS=:80 \
+loads/go-kit-demo-gateway:7c1e2e8a-dirty 
+```
+
+grpc服务：
+```bash
+docker run --platform linux/amd64 \
+-e MONGODB_URI=mongodb://localhost:27017 \
+-e SERVER_ADDRESS=:8000 \
+loads/go-kit-demo-user-service:7c1e2e8a-dirty 
+```
 
 # 接口测试
 
@@ -63,11 +80,10 @@ curl -XPOST -d'{
 
 ## 用户查询接口 - Search
 
-正确的请求：
 ```bash
 curl -XPOST -d'{
     "gender":1,
-    "min_age": 18,
-    "max_age": 30
+    "min_age": 19,
+    "max_age": 26
 }' localhost:8080/search
 ```

@@ -52,6 +52,7 @@ func (s *userEndpointImpl) Search(ctx context.Context, req *api.SearchRequest) (
 		filter = bson.D{}
 		fields = s.userRepo.CollectionInfo(ctx).Fields
 	)
+	// 检索条件
 	if req.Gender > 0 {
 		filter = append(filter, bson.E{Key: fields.Gender, Value: int(req.Gender)})
 	}
@@ -79,8 +80,14 @@ func (s *userEndpointImpl) Search(ctx context.Context, req *api.SearchRequest) (
 	res = &api.SearchResponse{
 		Users: make([]*api.UserData, 0),
 	}
-	if err = cur.All(ctx, &res.Users); err != nil {
-		return nil, errors.Wrap(err, `scan users failed`)
+	// 查询数据到实体对象中
+	var result = make([]model.User, 0)
+	if err = cur.All(ctx, &result); err != nil {
+		return nil, errors.Wrap(err, `mongodb scan result failed`)
+	}
+	// 将实体对象数据结构赋值到grpc返回数据结构中
+	if err = gconv.Scan(result, &res.Users); err != nil {
+		return nil, errors.Wrap(err, `result to users failed`)
 	}
 	return
 }

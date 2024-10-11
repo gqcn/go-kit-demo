@@ -17,8 +17,8 @@ func main() {
 		ctx         = context.Background()
 		logger      = g.Log()
 		config      = g.Cfg()
-		userSvcAddr = config.MustGet(ctx, `service.user`).String()
-		serverAddr  = config.MustGet(ctx, "server.address").String()
+		userSvcAddr = config.MustGetWithEnv(ctx, `service.user`).String()
+		serverAddr  = config.MustGetWithEnv(ctx, "server.address").String()
 	)
 	logger.Debugf(ctx, `user service addr: %s`, userSvcAddr)
 

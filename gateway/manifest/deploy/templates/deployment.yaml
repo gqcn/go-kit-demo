@@ -23,3 +23,4 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote}}
           {{- end }}
+

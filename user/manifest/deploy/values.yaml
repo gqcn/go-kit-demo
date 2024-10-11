@@ -1,10 +1,12 @@
-# Default values for api-getway.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+name: "user-service"
+port: 8000
+replicas: 1
 
-replicaCount: 1
+container:
+  name:  "main"
+  image: loads/go-kit-demo-user-service:7c1e2e8a-dirty
+  imagePullPolicy: Always
 
-image:
-  pullPolicy: Always
-
-arg: "server"
+env:
+  SERVER_ADDRESS: :8000
+  MONGODB_URI: mongodb://localhost:27017

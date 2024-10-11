@@ -1,0 +1,12 @@
+name: "gateway"
+port: 80
+replicas: 1
+
+container:
+  name:  "main"
+  image: loads/go-kit-demo-gateway:7c1e2e8a-dirty
+  imagePullPolicy: Always
+
+env:
+  SERVER_ADDRESS: :80
+  SERVICE_USER: user-service:8000
