@@ -9,12 +9,15 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// UserRepository 对数据库操作进行抽象封装。
 type UserRepository interface {
 	Collection(ctx context.Context) *mongo.Collection
 	CollectionInfo(ctx context.Context) userCollectionInfo
 	Create(ctx context.Context, user *model.User) error
 }
 
+// 数据集合信息，避免程序中对使用字段进行硬编码。
+// 该信息可以通过工具自动生成，以保持和数据集合的同步，避免人工维护易造成的程序结构与数据集合结构的差异。
 type userCollectionInfo struct {
 	Name   string
 	Fields userCollectionInfoFields

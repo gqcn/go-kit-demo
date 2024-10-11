@@ -15,44 +15,44 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type UserEndpoint interface {
-	Create(ctx context.Context, req *api.CreateRequest) (res *api.EmptyResponse, err error)
-	Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error)
-}
-
-type userEndpointImpl struct {
+type UserEndpoint struct {
+	api.UnimplementedUserServer
 	userRepo repository.UserRepository
 }
 
-func NewUserEndpoint(ctx context.Context, client *mongo.Client) UserEndpoint {
-	return &userEndpointImpl{
+func NewUserEndpoint(ctx context.Context, client *mongo.Client) *UserEndpoint {
+	return &UserEndpoint{
 		userRepo: repository.NewLocalUserRepository(ctx, client),
 	}
 }
 
 // Create 新增用户信息。
-func (s *userEndpointImpl) Create(ctx context.Context, req *api.CreateRequest) (res *api.EmptyResponse, err error) {
+func (s *UserEndpoint) Create(ctx context.Context, req *api.CreateRequest) (res *api.EmptyResponse, err error) {
 	g.Log().Debugf(ctx, `Create req: %s`, gjson.MustEncodeString(req))
+	// 将请求对象数据赋值到grpc的请求对象上
 	var userModel model.User
 	if err = gconv.Scan(req.User, &userModel); err != nil {
 		return
 	}
+	// 调用GRPC创建用户
 	if err = s.userRepo.Create(ctx, &userModel); err != nil {
 		return
 	}
+	// 返回空对象，只要没有error就表示成功。
+	// 根据业务场景定义返回数据结构。
 	res = &api.EmptyResponse{}
 	return
 }
 
 // Search 查询符合条件的用户列表。
-// @TODO 演示场景，未做分页。
-func (s *userEndpointImpl) Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error) {
+// TODO 演示项目，未做分页。
+func (s *UserEndpoint) Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error) {
 	g.Log().Debugf(ctx, `Search req: %s`, gjson.MustEncodeString(req))
 	var (
 		filter = bson.D{}
 		fields = s.userRepo.CollectionInfo(ctx).Fields
 	)
-	// 检索条件
+	// 检索条件判断
 	if req.Gender > 0 {
 		filter = append(filter, bson.E{Key: fields.Gender, Value: int(req.Gender)})
 	}
@@ -71,6 +71,7 @@ func (s *userEndpointImpl) Search(ctx context.Context, req *api.SearchRequest) (
 	if req.MatchMaxAge > 0 {
 		filter = append(filter, bson.E{Key: fields.MatchMaxAge, Value: bson.M{"$lte": int(req.MatchMaxAge)}})
 	}
+	// 执行数据库检索
 	collection := s.userRepo.Collection(ctx)
 	cur, err := collection.Find(ctx, filter)
 	if err != nil {

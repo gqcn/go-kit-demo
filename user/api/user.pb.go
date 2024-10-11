@@ -111,6 +111,8 @@ func (x *GeoPoint) GetCoordinates() []float64 {
 	return nil
 }
 
+// 用户实体结构
+// TODO 加上bson标签，便于mongodb查询数据时直接转换到该对象上，可以减少一层数据结构转换。
 type UserData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -204,6 +206,7 @@ func (x *UserData) GetMatchMaxAge() int32 {
 	return 0
 }
 
+// 创建用户信息请求
 type CreateRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -249,6 +252,7 @@ func (x *CreateRequest) GetUser() *UserData {
 	return nil
 }
 
+// 查询用户列表请求
 type SearchRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -334,6 +338,7 @@ func (x *SearchRequest) GetMatchMaxAge() int32 {
 	return 0
 }
 
+// 查询用户列表结果返回
 type SearchResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

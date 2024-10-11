@@ -13,22 +13,18 @@ import (
 	"google.golang.org/grpc"
 )
 
-type UserEndpoint interface {
-	Create(ctx context.Context, req *api.CreateRequest) (res *api.CreateResponse, err error)
-	Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error)
-}
-
-type UserEndpointImpl struct {
+type UserEndpoint struct {
 	userSvc userPb.UserClient
 }
 
-func NewUserEndpoint(userClientConn *grpc.ClientConn) UserEndpoint {
-	return &UserEndpointImpl{
+func NewUserEndpoint(userClientConn *grpc.ClientConn) *UserEndpoint {
+	return &UserEndpoint{
 		userSvc: userPb.NewUserClient(userClientConn),
 	}
 }
 
-func (s *UserEndpointImpl) Create(ctx context.Context, req *api.CreateRequest) (res *api.CreateResponse, err error) {
+// Create 创建用户请求。
+func (s *UserEndpoint) Create(ctx context.Context, req *api.CreateRequest) (res *api.CreateResponse, err error) {
 	// 数据校验
 	if err = g.Validator().Data(req).Run(ctx); err != nil {
 		return
@@ -46,7 +42,9 @@ func (s *UserEndpointImpl) Create(ctx context.Context, req *api.CreateRequest) (
 	return
 }
 
-func (s *UserEndpointImpl) Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error) {
+// Search 查询用户列表接口。
+// TODO 演示项目，未做分页。
+func (s *UserEndpoint) Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error) {
 	// 数据校验
 	if err = g.Validator().Data(req).Run(ctx); err != nil {
 		return

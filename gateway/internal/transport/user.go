@@ -10,22 +10,37 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/gorilla/mux"
+	"google.golang.org/grpc"
 )
 
-func NewCreateHandler(ep userep.UserEndpoint) *httptransport.Server {
-	return httptransport.NewServer(
-		makeCreateEndpoint(ep),
+func RegisterRoutesForUser(_ context.Context, router *mux.Router, userClientConn *grpc.ClientConn) {
+	// 用户相关接口路由注册
+	var userEndpoint = userep.NewUserEndpoint(userClientConn)
+	router.Methods("POST").Path("/create").Handler(httptransport.NewServer(
+		makeCreateEndpoint(userEndpoint),
 		decodeCreateRequest,
 		encodeResponse,
-	)
-}
-
-func NewSearchHandler(ep userep.UserEndpoint) *httptransport.Server {
-	return httptransport.NewServer(
-		makeSearchEndpoint(ep),
+	))
+	router.Methods("POST").Path("/search").Handler(httptransport.NewServer(
+		makeSearchEndpoint(userEndpoint),
 		decodeSearchRequest,
 		encodeResponse,
-	)
+	))
+}
+
+func makeCreateEndpoint(ep *userep.UserEndpoint) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(*api.CreateRequest)
+		return ep.Create(ctx, req)
+	}
+}
+
+func makeSearchEndpoint(ep *userep.UserEndpoint) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(*api.SearchRequest)
+		return ep.Search(ctx, req)
+	}
 }
 
 func decodeCreateRequest(_ context.Context, r *http.Request) (interface{}, error) {
@@ -46,18 +61,4 @@ func decodeSearchRequest(_ context.Context, r *http.Request) (interface{}, error
 
 func encodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	return json.NewEncoder(w).Encode(response)
-}
-
-func makeCreateEndpoint(ep userep.UserEndpoint) endpoint.Endpoint {
-	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(*api.CreateRequest)
-		return ep.Create(ctx, req)
-	}
-}
-
-func makeSearchEndpoint(ep userep.UserEndpoint) endpoint.Endpoint {
-	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(*api.SearchRequest)
-		return ep.Search(ctx, req)
-	}
 }

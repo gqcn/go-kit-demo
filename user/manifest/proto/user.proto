@@ -6,7 +6,9 @@ option go_package="user/api";
 
 // 用户服务
 service User {
+  // 创建用户信息
   rpc Create (CreateRequest) returns (EmptyResponse) {}
+  // 查询用户列表
   rpc Search (SearchRequest) returns (SearchResponse) {}
 }
 
@@ -19,6 +21,8 @@ message GeoPoint {
   repeated double coordinates = 2; // 坐标点
 }
 
+// 用户实体结构
+// TODO 加上bson标签，便于mongodb查询数据时直接转换到该对象上，可以减少一层数据结构转换。
 message UserData {
   string   name          = 1; // 姓名
   int32    age           = 2; // 年龄
@@ -29,10 +33,12 @@ message UserData {
   int32    match_max_age = 7; // 年龄偏好范围(max)
 }
 
+// 创建用户信息请求
 message CreateRequest {
   UserData user = 1; // 用户数据结构
 }
 
+// 查询用户列表请求
 message SearchRequest {
   int32 min_age       = 1; // 年龄范围(min)
   int32 max_age       = 2; // 年龄范围(max)
@@ -42,6 +48,7 @@ message SearchRequest {
   int32 match_max_age = 6; // 年龄偏好范围(max)
 }
 
+// 查询用户列表结果返回
 message SearchResponse {
   repeated UserData users = 1; // 查询匹配到的用户列表
 }

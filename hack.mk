@@ -1,9 +1,9 @@
-# compile services to binary.
+# 构建二进制文件，通常用于本地测试。
 .PHONY: build
 build:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./temp/linux_amd64/main ./main.go
 
-# compile proto files to pb go source files.
+# 编译proto定义文件到go pb源码
 .PHONY: pb
 pb:
 	protoc --proto_path=manifest/proto \
@@ -12,19 +12,20 @@ pb:
 	manifest/proto/*.proto
 
 
-# compile services to images.
+# 编译二进制、镜像，并推送到镜像仓库。
+# 这里由于是演示，推送到的是dockerhub镜像仓库。
 .PHONY: image
 image: build
 	$(eval _TAG  = $(shell git describe --dirty --always --tags --abbrev=8 --match 'v*' | sed 's/-/./2' | sed 's/-/./2'))
 	$(eval _TAG  = $(if ${TAG},  ${TAG}, $(_TAG)))
 	docker build --push --platform linux/amd64 -t loads/go-kit-demo-$(DOCKER_NAME):${_TAG} -f manifest/docker/Dockerfile .
 
-# compile helm to yaml.
+# 编译helm生成部署的yaml文件（开发测试使用）
 .PHONY: yaml
 yaml:
 	helm template manifest/deploy > ./temp/dev.yaml
 
-# compile helm to yaml for production only.
+# 编译helm生成部署的yaml文件（生产环境使用，values文件会不同）
 .PHONY: yaml.prod
 yaml.prod:
 	helm template manifest/deploy -f manifest/deploy/values-prod.yaml > ./temp/$(DOCKER_NAME).yaml

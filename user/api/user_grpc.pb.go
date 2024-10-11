@@ -29,7 +29,9 @@ const (
 //
 // 用户服务
 type UserClient interface {
+	// 创建用户信息
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
+	// 查询用户列表
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 }
 
@@ -67,7 +69,9 @@ func (c *userClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc
 //
 // 用户服务
 type UserServer interface {
+	// 创建用户信息
 	Create(context.Context, *CreateRequest) (*EmptyResponse, error)
+	// 查询用户列表
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 	mustEmbedUnimplementedUserServer()
 }

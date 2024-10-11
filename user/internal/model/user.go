@@ -1,5 +1,6 @@
 package model
 
+// User 数据集合实体对象，与数据集合字段一一对应。
 type User struct {
 	Name        string    `json:"name"          bson:"name"`          // 姓名
 	Age         int       `json:"age"           bson:"age"`           // 年龄

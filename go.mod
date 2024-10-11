@@ -5,6 +5,7 @@ go 1.23.1
 require (
 	github.com/go-kit/kit v0.13.0
 	github.com/gogf/gf/v2 v2.7.4
+	github.com/gorilla/mux v1.8.1
 	github.com/pkg/errors v0.9.1
 	go.mongodb.org/mongo-driver v1.17.1
 	google.golang.org/grpc v1.64.0
