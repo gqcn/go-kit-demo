@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 
-	"go-kit-demo/user/internal/consts"
 	"go-kit-demo/user/internal/model"
 
+	"github.com/gogf/gf/v2/frame/g"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -40,10 +40,11 @@ const (
 	collectionName = "user"
 )
 
-func NewLocalUserRepository(client *mongo.Client) UserRepository {
+func NewLocalUserRepository(ctx context.Context, client *mongo.Client) UserRepository {
+	var dbName = g.Cfg().MustGetWithEnv(ctx, "db_name").String()
 	return &userRepositoryImpl{
 		client:     client,
-		collection: client.Database(consts.DBName).Collection(collectionName),
+		collection: client.Database(dbName).Collection(collectionName),
 		collectionInfo: userCollectionInfo{
 			Name: collectionName,
 			Fields: userCollectionInfoFields{

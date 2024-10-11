@@ -24,9 +24,9 @@ type userEndpointImpl struct {
 	userRepo repository.UserRepository
 }
 
-func NewUserEndpoint(client *mongo.Client) UserEndpoint {
+func NewUserEndpoint(ctx context.Context, client *mongo.Client) UserEndpoint {
 	return &userEndpointImpl{
-		userRepo: repository.NewLocalUserRepository(client),
+		userRepo: repository.NewLocalUserRepository(ctx, client),
 	}
 }
 

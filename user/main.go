@@ -39,7 +39,7 @@ func main() {
 
 	// 初始化业务模块
 	var (
-		userService = endpoint.NewUserEndpoint(client)
+		userService = endpoint.NewUserEndpoint(ctx, client)
 		userServer  = transport.NewUserServer(userService)
 	)
 	logger.Infof(ctx, `grpc starts listening on: "%s"`, serverAddr)

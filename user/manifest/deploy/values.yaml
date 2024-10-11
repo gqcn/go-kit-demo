@@ -4,9 +4,10 @@ replicas: 1
 
 container:
   name:  "main"
-  image: loads/go-kit-demo-user-service:7c1e2e8a-dirty
+  image: loads/go-kit-demo-user-service:78477c10-dirty
   imagePullPolicy: Always
 
 env:
+  DB_NAME: "test"
   SERVER_ADDRESS: :8000
   MONGODB_URI: mongodb://localhost:27017

@@ -83,7 +83,7 @@ curl -XPOST -d'{
 ```bash
 curl -XPOST -d'{
     "gender":1,
-    "min_age": 19,
-    "max_age": 26
+    "min_age": 18,
+    "max_age": 30
 }' localhost:8080/search
 ```

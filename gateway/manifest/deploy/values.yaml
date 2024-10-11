@@ -1,5 +1,5 @@
 name: "gateway"
-port: 80
+port: 8080
 replicas: 1
 
 container:
@@ -8,5 +8,5 @@ container:
   imagePullPolicy: Always
 
 env:
-  SERVER_ADDRESS: :80
+  SERVER_ADDRESS: :8080
   SERVICE_USER: user-service:8000
