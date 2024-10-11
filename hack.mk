@@ -23,3 +23,8 @@ image: build
 .PHONY: yaml
 yaml:
 	helm template manifest/deploy > ./temp/deploy.yaml
+
+# compile helm to yaml for production only.
+.PHONY: yaml.prod
+yaml.prod:
+	helm template manifest/deploy -f manifest/deploy/values-prod.yaml > ./temp/deploy.yaml
