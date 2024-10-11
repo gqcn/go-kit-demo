@@ -1,3 +1,3 @@
-DOCKER_NAME = loads/go-kit-demo-gateway
+DOCKER_NAME = gateway
 
 include ../hack.mk

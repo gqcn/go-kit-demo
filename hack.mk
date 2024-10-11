@@ -17,14 +17,14 @@ pb:
 image: build
 	$(eval _TAG  = $(shell git describe --dirty --always --tags --abbrev=8 --match 'v*' | sed 's/-/./2' | sed 's/-/./2'))
 	$(eval _TAG  = $(if ${TAG},  ${TAG}, $(_TAG)))
-	docker build --push --platform linux/amd64 -t $(DOCKER_NAME):${_TAG} -f manifest/docker/Dockerfile .
+	docker build --push --platform linux/amd64 -t loads/go-kit-demo-$(DOCKER_NAME):${_TAG} -f manifest/docker/Dockerfile .
 
 # compile helm to yaml.
 .PHONY: yaml
 yaml:
-	helm template manifest/deploy > ./temp/deploy.yaml
+	helm template manifest/deploy > ./temp/dev.yaml
 
 # compile helm to yaml for production only.
 .PHONY: yaml.prod
 yaml.prod:
-	helm template manifest/deploy -f manifest/deploy/values-prod.yaml > ./temp/deploy.yaml
+	helm template manifest/deploy -f manifest/deploy/values-prod.yaml > ./temp/$(DOCKER_NAME).yaml

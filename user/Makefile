@@ -1,3 +1,3 @@
-DOCKER_NAME = loads/go-kit-demo-user-service
+DOCKER_NAME = user-service
 
 include ../hack.mk
