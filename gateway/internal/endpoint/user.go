@@ -3,8 +3,8 @@ package endpoint
 import (
 	"context"
 
-	"go-kit-demo/gateway/api"
-	userPb "go-kit-demo/user/api"
+	"go-kit-demo/gateway/api/user/v1"
+	userPb "go-kit-demo/user/api/user/v1"
 
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
@@ -24,7 +24,7 @@ func NewUserEndpoint(userClientConn *grpc.ClientConn) *UserEndpoint {
 }
 
 // Create 创建用户请求。
-func (s *UserEndpoint) Create(ctx context.Context, req *api.CreateRequest) (res *api.CreateResponse, err error) {
+func (s *UserEndpoint) Create(ctx context.Context, req *v1.CreateRequest) (res *v1.CreateResponse, err error) {
 	// 数据校验
 	if err = g.Validator().Data(req).Run(ctx); err != nil {
 		return
@@ -38,13 +38,13 @@ func (s *UserEndpoint) Create(ctx context.Context, req *api.CreateRequest) (res 
 	if _, err = s.userSvc.Create(ctx, &createReq); err != nil {
 		return nil, errors.Wrap(err, "create user failed")
 	}
-	res = &api.CreateResponse{}
+	res = &v1.CreateResponse{}
 	return
 }
 
 // Search 查询用户列表接口。
 // TODO 演示项目，未做分页。
-func (s *UserEndpoint) Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error) {
+func (s *UserEndpoint) Search(ctx context.Context, req *v1.SearchRequest) (res *v1.SearchResponse, err error) {
 	// 数据校验
 	if err = g.Validator().Data(req).Run(ctx); err != nil {
 		return
@@ -61,7 +61,7 @@ func (s *UserEndpoint) Search(ctx context.Context, req *api.SearchRequest) (res 
 	if searchRes, err = s.userSvc.Search(ctx, &searchReq); err != nil {
 		return nil, errors.Wrap(err, `search users failed`)
 	}
-	res = &api.SearchResponse{}
+	res = &v1.SearchResponse{}
 	if err = gconv.Scan(searchRes.Users, &res.Users); err != nil {
 		return
 	}

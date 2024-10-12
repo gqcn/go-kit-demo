@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"go-kit-demo/gateway/api"
+	"go-kit-demo/gateway/api/user/v1"
 	userep "go-kit-demo/gateway/internal/endpoint"
 
 	"github.com/go-kit/kit/endpoint"
@@ -42,20 +42,20 @@ func RegisterRoutesForUser(_ context.Context, router *mux.Router, userClientConn
 
 func makeCreateEndpoint(ep *userep.UserEndpoint) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(*api.CreateRequest)
+		req := request.(*v1.CreateRequest)
 		return ep.Create(ctx, req)
 	}
 }
 
 func makeSearchEndpoint(ep *userep.UserEndpoint) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(*api.SearchRequest)
+		req := request.(*v1.SearchRequest)
 		return ep.Search(ctx, req)
 	}
 }
 
 func decodeCreateRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request api.CreateRequest
+	var request v1.CreateRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func decodeCreateRequest(_ context.Context, r *http.Request) (interface{}, error
 }
 
 func decodeSearchRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request api.SearchRequest
+	var request v1.SearchRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}

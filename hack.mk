@@ -9,7 +9,7 @@ pb:
 	protoc --proto_path=manifest/proto \
 	--go_out=paths=source_relative:api \
 	--go-grpc_out=paths=source_relative:api \
-	manifest/proto/*.proto
+	manifest/proto/user/v1/*.proto
 
 
 # 编译二进制、镜像，并推送到镜像仓库。

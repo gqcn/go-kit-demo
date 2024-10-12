@@ -3,7 +3,7 @@ package transport
 import (
 	"context"
 
-	"go-kit-demo/user/api"
+	"go-kit-demo/user/api/user/v1"
 	userep "go-kit-demo/user/internal/endpoint"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,5 +12,5 @@ import (
 
 func RegisterServerForUser(ctx context.Context, server *grpc.Server, mongoClient *mongo.Client) {
 	var userEndpoint = userep.NewUserEndpoint(ctx, mongoClient)
-	api.RegisterUserServer(server, userEndpoint)
+	v1.RegisterUserServer(server, userEndpoint)
 }

@@ -1,4 +1,4 @@
-package api
+package v1
 
 // GeoPoint 地理位置结构
 type GeoPoint struct {

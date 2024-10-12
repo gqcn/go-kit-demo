@@ -3,7 +3,7 @@ package endpoint
 import (
 	"context"
 
-	"go-kit-demo/user/api"
+	"go-kit-demo/user/api/user/v1"
 	"go-kit-demo/user/internal/model"
 	"go-kit-demo/user/internal/repository"
 
@@ -16,7 +16,7 @@ import (
 )
 
 type UserEndpoint struct {
-	api.UnimplementedUserServer
+	v1.UnimplementedUserServer
 	userRepo repository.UserRepository
 }
 
@@ -27,7 +27,7 @@ func NewUserEndpoint(ctx context.Context, client *mongo.Client) *UserEndpoint {
 }
 
 // Create 新增用户信息。
-func (s *UserEndpoint) Create(ctx context.Context, req *api.CreateRequest) (res *api.EmptyResponse, err error) {
+func (s *UserEndpoint) Create(ctx context.Context, req *v1.CreateRequest) (res *v1.EmptyResponse, err error) {
 	g.Log().Debugf(ctx, `Create req: %s`, gjson.MustEncodeString(req))
 	// 将请求对象数据赋值到grpc的请求对象上
 	var userModel model.User
@@ -40,13 +40,13 @@ func (s *UserEndpoint) Create(ctx context.Context, req *api.CreateRequest) (res 
 	}
 	// 返回空对象，只要没有error就表示成功。
 	// 根据业务场景定义返回数据结构。
-	res = &api.EmptyResponse{}
+	res = &v1.EmptyResponse{}
 	return
 }
 
 // Search 查询符合条件的用户列表。
 // TODO 演示项目，未做分页。
-func (s *UserEndpoint) Search(ctx context.Context, req *api.SearchRequest) (res *api.SearchResponse, err error) {
+func (s *UserEndpoint) Search(ctx context.Context, req *v1.SearchRequest) (res *v1.SearchResponse, err error) {
 	g.Log().Debugf(ctx, `Search req: %s`, gjson.MustEncodeString(req))
 	var (
 		filter = bson.D{}
@@ -78,8 +78,8 @@ func (s *UserEndpoint) Search(ctx context.Context, req *api.SearchRequest) (res 
 		return nil, errors.Wrap(err, `search users failed`)
 	}
 	defer cur.Close(ctx)
-	res = &api.SearchResponse{
-		Users: make([]*api.UserData, 0),
+	res = &v1.SearchResponse{
+		Users: make([]*v1.UserData, 0),
 	}
 	// 查询数据到实体对象中
 	var result = make([]model.User, 0)
